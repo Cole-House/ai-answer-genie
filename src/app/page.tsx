@@ -24,26 +24,25 @@ export default function Home() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/chat", {
+      const data = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ message }),
       });
-
       // TODO: Handle the response from the chat API to display the AI response in the UI
-
-
-
-
+      const response = await data.json();
+      const aiMessage = { role: "ai" as const, content: response.message };
+      console.log(response.message);
+      // Add AI message to the conversation
+      setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
       console.error("Error:", error);
     } finally {
       setIsLoading(false);
     }
   };
-
 
   // TODO: Modify the color schemes, fonts, and UI as needed for a good user experience
   // Refer to the Tailwind CSS docs here: https://tailwindcss.com/docs/customizing-colors, and here: https://tailwindcss.com/docs/hover-focus-and-other-states
@@ -52,7 +51,9 @@ export default function Home() {
       {/* Header */}
       <div className="w-full bg-gray-800 border-b border-gray-700 p-4">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-xl font-semibold text-white">Chat</h1>
+          <h1 className="text-xl font-semibold text-white float-start">
+            Answer Genie
+          </h1>
         </div>
       </div>
 
